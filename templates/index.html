@@ -1,0 +1,71 @@
+{% load my_tag %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Title</title>
+
+</head>
+<body>
+
+{{ num|filter_multi:2 }}
+{{ num|filter_multi:"[22,33,444]" }}
+{#参数不限，但不能放在if for语句中#}
+{% simple_tag_multi 2 5 %}
+{% simple_tag_multi num 5 %}
+
+{#filter可以用在if等语句后，simple_tag不可以#}
+{% if num|filter_multi:30 > 100 %}
+    {{ num|filter_multi:30 }}
+{% endif %}
+
+
+<h4>{{ s }}</h4>
+<h4>{{ l.0 }}</h4>
+<h4>{{ dic.name }}</h4>
+<h4>{{ date.year }}</h4>
+<h4>{{ person_list.0.name}}</h4>
+{#句点符也可以用来引用对象的方法（无参数方法）#}
+
+{#遍历每一个元素#}
+<h4>{{ dic.name.upper }}</h4>
+{% for person in person_list %}
+<p>{{ person.name }}</p>
+{% endfor %}
+
+{#遍历字典#}
+{% for key,val in dic.items %}
+    <p>{{ key }}:{{ val }}</p>
+{% endfor %}
+
+{#循环序号#}
+{% forloop.counter %}
+
+{#for empty#}
+{% for person in person_list %}
+    <p>{{ person.name }}</p>
+    {% empty %}
+    <p>sorry,no person here</p>
+{% endfor %}
+
+{#if标签#}
+{% if num > 100 or num < 0 %}
+    <p>无效</p>
+{% elif num > 80 and num < 100 %}
+    <p>优秀</p>
+{% else %}
+    <p>一般</p>
+{% endif %}
+
+{#with标签#}
+{% with total=business.employees.count %}
+    {{ total}}employee{{ tatal|pluralize }}
+{% endwith %}
+
+{#csrf_token#}
+{% csrf_token %}
+
+</body>
+</html>
